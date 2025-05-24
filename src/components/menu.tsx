@@ -54,13 +54,12 @@ export default function Menu({ buttons }: Props) {
     return <>
     <div className="select-none fixed left-1/2 top-1/2 -translate-1/2 text-center h-1/2 w-5/6 flex flex-col place-items-center *:absolute">
         <span ref={ref} className={cn("text-3xl", isBlinking ? style["blink"] : "")}></span>
-        <div className={cn("transition-all duration-300 ease-in-out", showButtons ? "max-sm:translate-y-25 sm:translate-y-15" : "opacity-0 select-none pointer-events-none")}>
-            <div className="flex flex-row gap-10 *:w-1/2 items-center *:cursor-pointer *:transition-transform *:hover:scale-105 *:active:scale-95">
+        <div className={cn("grid grid-rows-[1fr_2fr] place-items-center transition-all duration-300 ease-in-out h-full", showButtons ? "max-sm:translate-y-25 sm:translate-y-15" : "opacity-0 select-none pointer-events-none")}>
+            <div className="w-full flex flex-row gap-5 *:w-1/2 items-center *:cursor-pointer *:transition-transform *:hover:scale-105 *:active:scale-95" style={{ "--buttons-count": buttons.length }}>
                 {buttons.map(({ text }, i) => <span onClick={() => setActiveButton(i)} key={`menu-button-${i}`}>{text}</span> )}
             </div>
-            <div className={cn("transition-all delay-500 duration-300 ease-in-out place-items-center", showButtons ? "translate-y-10" : "opacity-0 select-none pointer-events-none")}>
-                <Silly />
-            </div>
+            <Silly height={250} width={250} className={cn("transition-all delay-500 duration-300 ease-in-out", showButtons ? "translate-y-10" : "opacity-0 select-none pointer-events-none")} />
+
         </div>
     </div>
 

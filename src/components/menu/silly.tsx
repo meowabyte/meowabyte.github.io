@@ -4,13 +4,14 @@ import { useEffect, useRef, useState } from "preact/hooks"
 import { Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer } from "three"
 import { FontLoader, TextGeometry } from "three/examples/jsm/Addons.js"
 
+
 class SceneManager {
     fontLoader = new FontLoader()
     scene = new Scene();
     camera = new PerspectiveCamera();
     renderer: WebGLRenderer;
-
     text!: Mesh;
+
     manuallyRotated = false;
 
     constructor(canvas: HTMLCanvasElement) {
@@ -70,15 +71,27 @@ class SceneManager {
     }
 }
 
-export default function Silly() {
+
+
+type Props = {
+    height: number,
+    width: number,
+    className?: string
+}
+
+export default function Silly({ height, width, className }: Props) {
     const ref = useRef<HTMLCanvasElement>(null)
     const [sceneManager, setSceneManager] = useState<SceneManager | null>(null)
+    const [supportsWebGL, setWebglSupport] = useState<boolean | null>(null)
 
     useEffect(() => {
         if (!ref.current) return;
-        setSceneManager(
-            new SceneManager(ref.current)
-        )
+        try {
+            setSceneManager(new SceneManager(ref.current)) }
+        catch (e) {
+            console.error(`Could not show the silly render! `, e)
+            setWebglSupport(false)
+        }
     }, [ref])
 
     useEffect(() => {
@@ -161,5 +174,6 @@ export default function Silly() {
     }, [sceneManager])
 
 
-    return <canvas height={300} width={300} ref={ref} />
+    if (supportsWebGL === false) return null;
+    return <canvas class={className} height={height} width={width} ref={ref} />
 }
