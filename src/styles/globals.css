@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@layer base {
+  h2 { @apply text-2xl; }
+}
+
+@theme {
+  --color-background: theme("colors.black");
+  --color-foreground: theme("colors.white");
+}
+
+
+body {
+  @apply bg-background text-foreground
+}
