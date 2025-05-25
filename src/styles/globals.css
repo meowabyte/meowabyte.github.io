@@ -7,6 +7,11 @@
 @theme {
   --color-background: theme("colors.black");
   --color-foreground: theme("colors.white");
+
+  @keyframes blink {
+      from { opacity: 0 }
+      to { opacity: 1 }
+  }
 }
 
 

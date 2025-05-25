@@ -2,7 +2,7 @@ if (typeof window !== "undefined") throw new Error("PLEASE DO NOT IMPORT THIS OU
     
 import { prerender as ssr } from "preact-iso"
 import { App } from "./app"
-import { getMetadata } from "../helpers/metadata";
+import { getMetadata } from "../helpers/prerender/metadata";
 
 
 const REQUIRED_PRERENDERS = ["/", "/404"] as const

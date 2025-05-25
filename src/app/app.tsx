@@ -8,7 +8,7 @@ export function App() {
     return <LocationProvider>
         <ErrorBoundary>
             <Router>
-                <Route path="/" component={lazy(() => import("./page"))} />
+                <Route path="/" component={lazy(() => import("./home"))} />
                 <Route path="/404" component={lazy(() => import("./not-found"))} />
                 <Route default component={() => <Navigate to="/404" />} />
             </Router>

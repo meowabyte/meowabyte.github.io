@@ -1,5 +1,5 @@
 import { useLocation } from "preact-iso"
-import { useEffect } from "preact/hooks"
+import { useLayoutEffect } from "preact/hooks"
 
 type NavigateProps = {
     /** Route that this component should redirect to */
@@ -12,9 +12,9 @@ type NavigateProps = {
 export function Navigate({ to, replace }: NavigateProps) {
     const { route } = useLocation()
 
-    useEffect(() => {
+    useLayoutEffect(() => {
         route(to, replace)
-    }, [route])
+    }, [])
 
     return null
 }

@@ -1,8 +1,8 @@
-
-
-import { useEffect, useRef, useState } from "preact/hooks"
+import { ArrowLeftRight } from "lucide-preact"
+import { useCallback, useEffect, useRef, useState } from "preact/hooks"
 import { Mesh, MeshBasicMaterial, PerspectiveCamera, Scene, WebGLRenderer } from "three"
 import { FontLoader, TextGeometry } from "three/examples/jsm/Addons.js"
+import { cn } from "../helpers/utils"
 
 
 class SceneManager {
@@ -79,10 +79,11 @@ type Props = {
     className?: string
 }
 
-export default function Silly({ height, width, className }: Props) {
+export default function SillyRenderer({ height, width, className }: Props) {
     const ref = useRef<HTMLCanvasElement>(null)
     const [sceneManager, setSceneManager] = useState<SceneManager | null>(null)
     const [supportsWebGL, setWebglSupport] = useState<boolean | null>(null)
+    const [shouldShowTip, setShowTip] = useState(true)
 
     useEffect(() => {
         if (!ref.current) return;
@@ -173,7 +174,23 @@ export default function Silly({ height, width, className }: Props) {
         };
     }, [sceneManager])
 
+    const hideTip = useCallback(() => {
+        if (!shouldShowTip) return;
+        setShowTip(false)
+    }, [shouldShowTip])
+
+    const showTip = useCallback(() => {
+        if (shouldShowTip) return;
+        setShowTip(true)
+    }, [shouldShowTip])
 
     if (supportsWebGL === false) return null;
-    return <canvas class={className} height={height} width={width} ref={ref} />
+    return <div class={cn(className, "group")} >
+        <canvas
+            onMouseDown={hideTip} onTouchStart={hideTip}
+            onMouseUp={showTip} onTouchEnd={showTip}
+            height={height} width={width} ref={ref}
+        />
+        {shouldShowTip && <ArrowLeftRight class="absolute left-1/2 bottom-5 scale-3d scale-y-75 transition-opacity duration-100 opacity-0 group-hover:!opacity-75" />}
+    </div>
 }

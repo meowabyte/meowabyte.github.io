@@ -1,9 +1,11 @@
 
+import ModalBody from "../../components/modal/modalbody";
 
-import { calculateAge } from "../../../helpers/utils";
-import { ModalBody } from "../modal";
-
-const age = calculateAge(new Date(2005, 4, 27))
+const age = (() => {
+    const diff = Date.now() - new Date(2005, 4, 27).getTime();
+    const ageDate = new Date(diff);
+    return Math.abs(ageDate.getUTCFullYear() - 1970);
+})()
 
 export default function AboutMe() {
     return <ModalBody className="grid max-lg:w-4/5 max-md:grid-rows-[0.5fr_2fr] md:grid-cols-[1fr_2fr] gap-5">

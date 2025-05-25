@@ -1,8 +1,7 @@
 import { HardDrive, Link2, StarIcon } from "lucide-preact";
-import { ModalBody } from "../modal";
+import ModalBody from "../../components/modal/modalbody";
 import { SOCIALS } from "./social"
 import { useCallback } from "preact/hooks";
-import languageNames from "../../../helpers/languagenames";
 
 
 type RepoData = { name: string, description: string, stars: number, language: string }
@@ -34,6 +33,14 @@ const FEATURED_REPOS: RepoData[] = [
     }
 ] as const
 
+const languageColors = new Map([
+   ["CSS", "#663399"],
+   ["HTML", "#e34c26"],
+   ["JavaScript", "#f1e05a"],
+   ["Rust", "#dea584"],
+   ["TypeScript", "#3178c6"],
+])
+
 function Project({ repo: { name, description, stars, language } }: { repo: RepoData }) {
     const visitRepo = useCallback(() => window.open(`https://github.com/${SOCIALS.github}/${name}`), [])
 
@@ -44,7 +51,7 @@ function Project({ repo: { name, description, stars, language } }: { repo: RepoD
         </div>
         <span className="min-h-12">{description}</span>
         <div className="flex flex-row justify-between *:flex *:flex-row *:gap-1 *:items-center">
-            <span><div style={{ "--language-color": languageNames.get(language) ?? "#fff" } as any} className="bg-[var(--language-color)] w-[1em] h-[1em] rounded-sm" /> {language}</span>
+            <span><div style={{ "--language-color": languageColors.get(language) ?? "#fff" } as any} className="bg-[var(--language-color)] w-[1em] h-[1em] rounded-sm" /> {language}</span>
             <span><StarIcon size="1.3em" className="inline" /> ±{stars}</span>
         </div>
     </div>

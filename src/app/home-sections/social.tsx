@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from "preact/hooks";
-import { ModalBody } from "../modal";
+import ModalBody from "../../components/modal/modalbody";
 
 const LINKS = new Map([
     ["youtube", "youtube.com"],
