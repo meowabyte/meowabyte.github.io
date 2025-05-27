@@ -1,9 +1,11 @@
 import { useEffect, useRef, useState } from "preact/hooks"
-import { cn, sleep } from "../../helpers/utils";
+import { birthdayMode, cn, sleep } from "../../helpers/utils";
+
 
 const UPDATE_DELAY = 500 as const
 const UPDATE_FADE_OPACITY = 0.2 as const
 const UPDATE_CHARACTERS = ["@", "#", "/", "\\", "&", "%"] as const
+const UPDATE_BDAYMODE_COLORS = ["white", "red", "blue", "yellow", "green", "purple", "orange", "pink"]
 
 
 const FONT_NAME = "Roboto Mono" as const
@@ -76,12 +78,13 @@ class BackgroundManager {
             const x = o?.x ?? Math.floor(Math.random() * this.target.width)
             return x - x % FONT_PX.width
         })()
+        const fillStyle = o?.style ?? birthdayMode ? UPDATE_BDAYMODE_COLORS[Math.floor(Math.random() * UPDATE_BDAYMODE_COLORS.length)] : "white"
         
         for (let y = 0; y < this.target.height + UPDATE_FADE_SIZE; y += FONT_JUMP_SIZE) {
             if (x > this.target.width) break; // Resized - disable if outside of area
 
             // Char
-            this.ctx.fillStyle = o?.style ?? "white"
+            this.ctx.fillStyle = fillStyle
             this.ctx.font = FONT
             this.ctx.fillText(
                 UPDATE_CHARACTERS[Math.floor(Math.random() * UPDATE_CHARACTERS.length)],

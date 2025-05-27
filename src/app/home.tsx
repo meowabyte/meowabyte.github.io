@@ -1,7 +1,7 @@
 import "../styles/main.css"
 
 import { useCallback, useEffect, useRef, useState } from "preact/hooks"
-import { cn, sleep } from "../helpers/utils"
+import { birthdayMode, cn, sleep } from "../helpers/utils"
 import Menu, { MenuProvider } from "../components/menu";
 import MenuButton from "../components/menu/menubutton";
 import SillyRenderer from "../components/silly";
@@ -9,7 +9,7 @@ import { lazy } from "preact-iso";
 
 const MatrixBG = lazy(() => import("../components/bg/matrix"))
 
-const TITLE_TEXT = "Welcome to meowpa.ws!" as const
+const TITLE_TEXT = birthdayMode ? "Happy birthday Kuba!" : "Welcome to meowpa.ws!" as const
 const TYPEWRITER_DELAY = 30 as const
 
 const GLITCH_CHARACTERS = ["@", "#", "/", "\\", "&", "%"] as const
