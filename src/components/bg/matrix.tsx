@@ -5,7 +5,6 @@ import { birthdayMode, cn, sleep } from "../../helpers/utils";
 const UPDATE_DELAY = 500 as const
 const UPDATE_FADE_OPACITY = 0.2 as const
 const UPDATE_CHARACTERS = ["@", "#", "/", "\\", "&", "%"] as const
-const UPDATE_BDAYMODE_COLORS = ["white", "red", "blue", "yellow", "green", "purple", "orange", "pink"]
 
 
 const FONT_NAME = "Roboto Mono" as const
@@ -22,6 +21,12 @@ const FONT_PX = (() => {
 const FONT_JUMP_SIZE = FONT_PX.actualBoundingBoxAscent + 10
 const UPDATE_FADE_SIZE = FONT_JUMP_SIZE * (Math.ceil(1 / UPDATE_FADE_OPACITY) * 4)
 
+
+const randomColor = () => {
+  const hue = Math.floor(Math.random() * 360);
+  const lightness = Math.floor(Math.random() * 21) + 40;
+  return `hsl(${hue}, 100%, ${lightness}%)`;
+}
 
 type BMAddToMatrixOptions = {
     /** Position of the element. Random by default */
@@ -78,7 +83,7 @@ class BackgroundManager {
             const x = o?.x ?? Math.floor(Math.random() * this.target.width)
             return x - x % FONT_PX.width
         })()
-        const fillStyle = o?.style ?? birthdayMode ? UPDATE_BDAYMODE_COLORS[Math.floor(Math.random() * UPDATE_BDAYMODE_COLORS.length)] : "white"
+        const fillStyle = birthdayMode ? randomColor() : (o?.style ?? "white")
         
         for (let y = 0; y < this.target.height + UPDATE_FADE_SIZE; y += FONT_JUMP_SIZE) {
             if (x > this.target.width) break; // Resized - disable if outside of area
