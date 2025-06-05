@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { birthdayMode, cn, sleep } from "../../helpers/utils";
+import { cn, eventFlags, sleep } from "../../helpers/utils";
 
 const UPDATE_DELAY = 500 as const;
 const UPDATE_FADE_OPACITY = 0.2 as const;
@@ -22,6 +22,13 @@ const randomColor = () => {
     const hue = Math.floor(Math.random() * 360);
     const lightness = Math.floor(Math.random() * 21) + 40;
     return `hsl(${hue}, 100%, ${lightness}%)`;
+};
+
+const BI_COLORS = ["#D60270", "#9B4F96", "#0038A8"] as const;
+const getParticleEffect = () => {
+    if (eventFlags.includes("BIRTHDAY")) return randomColor();
+    if (eventFlags.includes("PRIDE")) return BI_COLORS[Math.floor(Math.random() * BI_COLORS.length)];
+    return "white";
 };
 
 type BMAddToMatrixOptions = {
@@ -77,7 +84,7 @@ class BackgroundManager {
             const x = o?.x ?? Math.floor(Math.random() * this.target.width);
             return x - (x % FONT_PX.width);
         })();
-        const fillStyle = birthdayMode ? randomColor() : (o?.style ?? "white");
+        const fillStyle = o?.style ?? getParticleEffect();
 
         for (let y = 0; y < this.target.height + UPDATE_FADE_SIZE; y += FONT_JUMP_SIZE) {
             if (x > this.target.width) break; // Resized - disable if outside of area

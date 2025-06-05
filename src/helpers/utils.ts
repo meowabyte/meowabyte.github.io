@@ -4,9 +4,18 @@ export const age = (() => {
     const ageDate = new Date(diff);
     return Math.abs(ageDate.getUTCFullYear() - 1970);
 })();
-export const birthdayMode = (() => {
+
+export const EVENT_FLAGS = ["BIRTHDAY", "PRIDE"] as const;
+type EventFlagsType = (typeof EVENT_FLAGS)[number];
+
+export const eventFlags: EventFlagsType[] = (() => {
+    const flags: EventFlagsType[] = [];
     const now = new Date();
-    return now.getMonth() === BIRTHDATE.getMonth() && now.getDate() === BIRTHDATE.getDate();
+
+    if (now.getMonth() === BIRTHDATE.getMonth() && now.getDate() === BIRTHDATE.getDate()) flags.push("BIRTHDAY");
+    if (new Date().getMonth() === 5) flags.push("PRIDE");
+
+    return flags;
 })();
 
 export const cn = (...classnames: (string | false | undefined)[]) =>

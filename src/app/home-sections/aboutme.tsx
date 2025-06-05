@@ -1,6 +1,6 @@
 import { useState } from "preact/hooks";
 import ModalBody from "../../components/modal/modalbody";
-import { age, birthdayMode } from "../../helpers/utils";
+import { age, eventFlags } from "../../helpers/utils";
 import bdayHat from "../../img/bday-hat.png";
 
 export default function AboutMe() {
@@ -9,7 +9,7 @@ export default function AboutMe() {
     return (
         <ModalBody className="grid max-lg:w-4/5 max-md:grid-rows-[0.5fr_2fr] md:grid-cols-[1fr_2fr] gap-5">
             <div class="relative">
-                {birthdayMode && avatarLoaded && (
+                {eventFlags.includes("BIRTHDAY") && avatarLoaded && (
                     <img
                         height={70}
                         width={70}
