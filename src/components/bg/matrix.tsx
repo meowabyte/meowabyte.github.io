@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { cn, sleep } from "../../helpers/utils";
+import { cn, isFocused, sleep } from "../../helpers/utils";
 import { eventFlags } from "../../helpers/events";
 
 const UPDATE_DELAY = 500 as const;
@@ -18,6 +18,8 @@ const FONT_PX = (() => {
 
 const FONT_JUMP_SIZE = FONT_PX.actualBoundingBoxAscent + 10;
 const UPDATE_FADE_SIZE = FONT_JUMP_SIZE * (Math.ceil(1 / UPDATE_FADE_OPACITY) * 4);
+
+const MAX_CONCURRENT_PARTICLES = (((window.innerHeight / FONT_JUMP_SIZE) * 100) / UPDATE_DELAY) * 2;
 
 const randomColor = () => {
     const hue = Math.floor(Math.random() * 360);
@@ -42,6 +44,8 @@ type BMAddToMatrixOptions = {
 };
 
 class BackgroundManager {
+    private concurrentParticles: number = 0;
+
     target: HTMLCanvasElement;
     ctx: CanvasRenderingContext2D;
     updateInterval?: number;
@@ -81,11 +85,16 @@ class BackgroundManager {
     }
 
     async addToMatrix(o?: BMAddToMatrixOptions) {
+        if (this.concurrentParticles >= MAX_CONCURRENT_PARTICLES) return;
+
         const x = (() => {
             const x = o?.x ?? Math.floor(Math.random() * this.target.width);
             return x - (x % FONT_PX.width);
         })();
         const fillStyle = o?.style ?? getParticleEffect();
+        const delay = o?.delay ?? 100;
+
+        this.concurrentParticles++;
 
         let characterOffset = Math.floor(Math.random() * UPDATE_CHARACTERS.length);
         for (let y = 0; y < this.target.height + UPDATE_FADE_SIZE; y += FONT_JUMP_SIZE) {
@@ -100,8 +109,10 @@ class BackgroundManager {
             this.ctx.fillStyle = `rgba(0,0,0,${UPDATE_FADE_OPACITY})`;
             this.ctx.fillRect(x, y, FONT_PX.width, -UPDATE_FADE_SIZE);
 
-            await sleep(o?.delay ?? 100);
+            await sleep(isFocused ? delay : delay * 5);
         }
+
+        this.concurrentParticles--;
     }
 }
 

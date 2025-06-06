@@ -12,3 +12,7 @@ export const cn = (...classnames: (string | false | undefined)[]) =>
         .trim();
 
 export const sleep = async (time: number) => new Promise(r => setTimeout(r, time));
+
+export let isFocused = true;
+window.addEventListener("focus", () => (isFocused = true));
+window.addEventListener("blur", () => (isFocused = false));
