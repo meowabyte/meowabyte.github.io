@@ -59,11 +59,12 @@ function SocialLink({ data: [type, data] }: { data: [string, string | string[]] 
 
     return (
         <div>
-            <span className="font-bold text-left">{readableType}</span>
+            <span className="font-bold text-left select-none">{readableType}</span>
             <span
+                role="button"
                 title={`${typeof onClick === "string" ? "Visit" : "Check out"} ${readableType}`}
                 onClick={handleClick}
-                className="hover:underline cursor-pointer text-right"
+                className="text-right select-text"
             >
                 {text}
             </span>
@@ -75,7 +76,7 @@ export default function Social() {
     return (
         <ModalBody className="grid max-lg:grid-rows-2 lg:grid-cols-2 max-sm:w-4/5 lg:justify-between gap-10 *:[&>h2]:text-center *:[&>h2]:mb-5 *:*:*:grid *:*:*:grid-cols-2 *:*:*:content-between">
             <div>
-                <h2>Socials</h2>
+                <h2 class="select-none">Socials</h2>
                 <div>
                     {Object.entries(SOCIALS).map((s, i) => (
                         <SocialLink data={s} key={`social-entry-${i}`} />
@@ -83,7 +84,7 @@ export default function Social() {
                 </div>
             </div>
             <div>
-                <h2>Contact</h2>
+                <h2 class="select-none">Contact</h2>
                 <div>
                     {Object.entries(CONTACT).map((c, i) => (
                         <SocialLink data={c} key={`contact-entry-${i}`} />

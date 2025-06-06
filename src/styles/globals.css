@@ -5,8 +5,9 @@
         @apply text-2xl;
     }
 
-    button {
-        @apply underline decoration-dotted underline-offset-[6px] hover:decoration-solid cursor-pointer;
+    button,
+    [role="button"] {
+        @apply underline decoration-dotted underline-offset-[6px] hover:decoration-solid cursor-pointer select-none;
     }
 }
 
