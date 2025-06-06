@@ -1,9 +1,20 @@
 if (typeof window !== "undefined") throw new Error("PLEASE DO NOT IMPORT THIS OUTSIDE OF SERVER");
 
-//@ts-expect-error prerender stub
-globalThis.localStorage = { getItem: () => null, setItem: () => {} };
-//@ts-expect-error prerender stub
-globalThis.window = { dispatchEvent: () => {}, localStorage: globalThis.localStorage };
+// window object stub for SSR
+(() => {
+    const stubFunc = () => {};
+    const stubReturnFunc = (ret: unknown) => () => ret;
+
+    Object.defineProperty(globalThis, "localStorage", { value: { getItem: stubReturnFunc(null), setItem: stubFunc } });
+    Object.defineProperty(globalThis, "window", {
+        value: {
+            dispatchEvent: stubFunc,
+            localStorage: globalThis.localStorage,
+            addEventListener: stubFunc,
+            removeEventListener: stubFunc
+        }
+    });
+})();
 
 import { prerender as ssr } from "preact-iso";
 import { App } from "./app";
