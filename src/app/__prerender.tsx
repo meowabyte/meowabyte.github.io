@@ -1,5 +1,10 @@
 if (typeof window !== "undefined") throw new Error("PLEASE DO NOT IMPORT THIS OUTSIDE OF SERVER");
 
+//@ts-expect-error prerender stub
+globalThis.localStorage = { getItem: () => null, setItem: () => {} };
+//@ts-expect-error prerender stub
+globalThis.window = { dispatchEvent: () => {}, localStorage: globalThis.localStorage };
+
 import { prerender as ssr } from "preact-iso";
 import { App } from "./app";
 import { getMetadata } from "../helpers/prerender/metadata";
