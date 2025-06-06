@@ -1,11 +1,12 @@
 import "../styles/main.css";
 
-import { useCallback, useEffect, useRef, useState } from "preact/hooks";
-import { cn, eventFlags, sleep } from "../helpers/utils";
+import { useCallback, useEffect, useMemo, useRef, useState } from "preact/hooks";
+import { cn, sleep } from "../helpers/utils";
 import Menu, { MenuProvider } from "../components/menu";
 import MenuButton from "../components/menu/menubutton";
 import SillyRenderer from "../components/silly";
 import { lazy } from "preact-iso";
+import { boringMode, EVENT_FLAGS_BLACKLIST, eventFlags } from "../helpers/events";
 
 const MatrixBG = lazy(() => import("../components/bg/matrix"));
 
@@ -92,8 +93,19 @@ export default function Home() {
         [animationState]
     );
 
+    const boringModeState = useMemo(() => boringMode.getState(), []);
+    const toggleBoringMode = useCallback(() => {
+        boringMode.toggle();
+        location.reload();
+    }, []);
+
     return (
         <div class="roboto-mono">
+            {(EVENT_FLAGS_BLACKLIST.some(f => eventFlags.includes(f)) || boringModeState) && (
+                <button class="fixed left-1/2 -translate-x-1/2 top-2 text-sm text-secondary" onClick={toggleBoringMode}>
+                    [ Boring Mode - {boringModeState ? "ON" : "OFF"} ]
+                </button>
+            )}
             <MenuProvider>
                 <div class="select-none fixed left-1/2 top-1/2 -translate-1/2 text-center h-1/2 w-5/6 flex flex-col items-center">
                     <span

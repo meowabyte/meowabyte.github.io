@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "preact/hooks";
-import { cn, eventFlags, sleep } from "../../helpers/utils";
+import { cn, sleep } from "../../helpers/utils";
+import { eventFlags } from "../../helpers/events";
 
 const UPDATE_DELAY = 500 as const;
 const UPDATE_FADE_OPACITY = 0.2 as const;

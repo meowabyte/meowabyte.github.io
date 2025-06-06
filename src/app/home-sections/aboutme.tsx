@@ -1,7 +1,8 @@
 import { useState } from "preact/hooks";
 import ModalBody from "../../components/modal/modalbody";
-import { age, eventFlags } from "../../helpers/utils";
+import { age } from "../../helpers/utils";
 import bdayHat from "../../img/bday-hat.png";
+import { eventFlags } from "../../helpers/events";
 
 export default function AboutMe() {
     const [avatarLoaded, setAvatarLoaded] = useState(false);
