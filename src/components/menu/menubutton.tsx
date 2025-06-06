@@ -8,16 +8,19 @@ type PropsLazy =
     | { lazy?: false; element: () => JSX.Element }
     | { lazy: true; element: ReturnType<typeof lazy<() => JSX.Element>> };
 
-type Props = PropsLazy & { children: string };
+type Props = PropsLazy & { children: string; onHover?: () => void };
 
-export default function MenuButton({ children, lazy, element }: Props) {
+export default function MenuButton({ children, lazy, element, onHover }: Props) {
     const { showModal } = useMenu();
-    const preloadIfLazy = useCallback(() => lazy && element.preload(), [lazy, element]);
+    const hoverCallback = useCallback(() => {
+        if (lazy) element.preload();
+        onHover?.();
+    }, [lazy, element, onHover]);
 
     return (
         <span
-            onTouchStart={preloadIfLazy}
-            onMouseEnter={preloadIfLazy}
+            onTouchStart={hoverCallback}
+            onMouseEnter={hoverCallback}
             onClick={() => showModal(() => element)}
             class="w-32 hover:duration-200 active:duration-100 hover:scale-105 active:scale-95 active:brightness-75"
         >

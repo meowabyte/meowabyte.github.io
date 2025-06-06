@@ -21,6 +21,7 @@ const GLITCH_CHARACTERS = ["@", "#", "/", "\\", "&", "%"] as const;
 
 export default function Home() {
     const [isBlinking, setBlinking] = useState(true);
+    const [avatarPreloaded, setAvatarPreloaded] = useState(false);
     const [animationState, setAnimationState] = useState(0);
     const titleRef = useRef<HTMLSpanElement>(null);
 
@@ -99,6 +100,13 @@ export default function Home() {
         location.reload();
     }, []);
 
+    const preloadAvatar = useCallback(() => {
+        if (avatarPreloaded) return;
+
+        new Image().src = "https://github.com/meowabyte.png?size=400";
+        setAvatarPreloaded(true);
+    }, [avatarPreloaded]);
+
     return (
         <div class="roboto-mono">
             {animationState >= 3 && (EVENT_FLAGS_BLACKLIST.some(f => eventFlags.includes(f)) || boringModeState) && (
@@ -117,7 +125,11 @@ export default function Home() {
                     ></span>
 
                     <Menu className={animationSlide(1)}>
-                        <MenuButton lazy element={lazy(() => import("./home-sections/aboutme"))}>
+                        <MenuButton
+                            onHover={preloadAvatar}
+                            lazy
+                            element={lazy(() => import("./home-sections/aboutme"))}
+                        >
                             About Me
                         </MenuButton>
                         <MenuButton lazy element={lazy(() => import("./home-sections/projects"))}>
