@@ -6,6 +6,7 @@
     }
 
     button,
+    a,
     [role="button"] {
         @apply underline decoration-dotted underline-offset-[6px] hover:decoration-solid cursor-pointer select-none;
     }

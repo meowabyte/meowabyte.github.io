@@ -1,36 +1,11 @@
 import { HardDrive, Link2, StarIcon } from "lucide-preact";
 import ModalBody from "../../components/modal/modalbody";
 import { SOCIALS } from "./social";
-import { useCallback } from "preact/hooks";
+import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
+import type { RepoData } from "../../helpers/github";
+import GitHubProjects from "../../helpers/github";
 
-type RepoData = { name: string; description: string; stars: number; language: string };
-
-const FEATURED_REPOS: RepoData[] = [
-    {
-        name: "VencordPlugins",
-        description: 'My plugins made for the cutest Discord client mod called "Vencord"',
-        language: "TypeScript",
-        stars: 20
-    },
-    {
-        name: "gif-validator",
-        description: "Clean your favorite Discord GIFs from dead and broken links with this simple utility tool!",
-        language: "TypeScript",
-        stars: 4
-    },
-    {
-        name: "gm-runtime-browser",
-        description: "Website for browsing through huge list of runners for GameMaker engine",
-        language: "TypeScript",
-        stars: 1
-    },
-    {
-        name: "meowabyte",
-        description: "My Github's README + animation generating script",
-        language: "TypeScript",
-        stars: 1
-    }
-] as const;
+const MAX_TOPICS_VISIBLE = 2 as const;
 
 const languageColors = new Map([
     ["CSS", "#663399"],
@@ -40,8 +15,13 @@ const languageColors = new Map([
     ["TypeScript", "#3178c6"]
 ]);
 
-function Project({ repo: { name, description, stars, language } }: { repo: RepoData }) {
-    const visitRepo = useCallback(() => window.open(`https://github.com/${SOCIALS.github}/${name}`), []);
+function Project({ repo: { name, description, language, html_url, stargazers_count, topics } }: { repo: RepoData }) {
+    const visitRepo = useCallback(() => window.open(html_url), []);
+    const topicsToShow = useMemo(() => {
+        const t = topics.slice(0, MAX_TOPICS_VISIBLE);
+        if (topics.length > MAX_TOPICS_VISIBLE) t.push(`+${topics.length - MAX_TOPICS_VISIBLE}`);
+        return t;
+    }, [topics]);
 
     return (
         <div
@@ -54,17 +34,22 @@ function Project({ repo: { name, description, stars, language } }: { repo: RepoD
                 </span>
                 <Link2 size="1.3em" />
             </div>
-            <span className="min-h-12">{description}</span>
+            <span className="min-h-12 line-clamp-3">{description}</span>
+            <div className="flex flex-row gap-1 *:border-[1px] *:p-1 *:h-max *:w-max text-[0.60rem]">
+                {topicsToShow.map((t, i) => (
+                    <span key={`topic-${i}`}>{t}</span>
+                ))}
+            </div>
             <div className="flex flex-row justify-between *:flex *:flex-row *:gap-1 *:items-center">
                 <span>
                     <div
-                        style={{ "--language-color": languageColors.get(language) ?? "#fff" }}
+                        style={{ "--language-color": languageColors.get(language ?? "") ?? "#fff" }}
                         className="bg-[var(--language-color)] w-[1em] h-[1em] rounded-sm"
                     />{" "}
-                    {language}
+                    {language ?? "-"}
                 </span>
                 <span>
-                    <StarIcon size="1.3em" className="inline" /> ±{stars}
+                    <StarIcon size="1.3em" className="inline" /> ±{stargazers_count}
                 </span>
             </div>
         </div>
@@ -72,9 +57,24 @@ function Project({ repo: { name, description, stars, language } }: { repo: RepoD
 }
 
 function ProjectsList() {
+    const [projects, setProjects] = useState<RepoData[] | null>(null);
+
+    useEffect(() => {
+        (async () => {
+            const gh = new GitHubProjects(SOCIALS.github! as string);
+            setProjects(await gh.getProjects());
+        })();
+    }, []);
+
+    const projectsToShow = useMemo(
+        () => (projects ?? []).toSorted(({ stargazers_count: a }, { stargazers_count: b }) => b - a).slice(0, 4),
+        [projects]
+    );
+
+    if (!projects) return <div class="text-center">Loading...</div>;
     return (
         <div className="grid lg:grid-cols-2 max-lg:grid-cols-1 gap-5 max-lg:overflow-y-auto p-3">
-            {FEATURED_REPOS.map((r, i) => (
+            {projectsToShow.map((r, i) => (
                 <Project repo={r} key={`featuredrepo-${i}`} />
             ))}
         </div>
@@ -84,8 +84,11 @@ function ProjectsList() {
 export default function Projects() {
     return (
         <ModalBody className="flex flex-col gap-3 max-sm:w-4/5">
-            <h2 className="text-center">My featured projects!</h2>
+            <h2 className="text-center">My popular projects!</h2>
             <ProjectsList />
+            <a class="text-center" target="_blank" href="https://github.com/meowabyte?tab=repositories">
+                See more projects!
+            </a>
         </ModalBody>
     );
 }
