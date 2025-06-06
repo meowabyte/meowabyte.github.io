@@ -101,7 +101,7 @@ export default function Home() {
 
     return (
         <div class="roboto-mono">
-            {(EVENT_FLAGS_BLACKLIST.some(f => eventFlags.includes(f)) || boringModeState) && (
+            {animationState >= 3 && (EVENT_FLAGS_BLACKLIST.some(f => eventFlags.includes(f)) || boringModeState) && (
                 <button class="fixed left-1/2 -translate-x-1/2 top-2 text-sm text-secondary" onClick={toggleBoringMode}>
                     [ Boring Mode - {boringModeState ? "ON" : "OFF"} ]
                 </button>

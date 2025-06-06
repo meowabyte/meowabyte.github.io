@@ -4,10 +4,10 @@
     "": {
       "name": "meowabyte-page",
       "dependencies": {
+        "@fontsource/roboto-mono": "^5.2.6",
         "lucide-preact": "^0.513.0",
         "preact": "^10.26.8",
         "preact-iso": "^2.9.1",
-        "tailwindcss": "^4.1.8",
         "three": "^0.177.0",
       },
       "devDependencies": {
@@ -23,6 +23,7 @@
         "prettier": "^3.5.3",
         "sharp": "^0.34.2",
         "svgo": "^3.3.2",
+        "tailwindcss": "^4.1.8",
         "typescript": "~5.8.3",
         "typescript-eslint": "^8.33.1",
         "vite": "^6.3.5",
@@ -154,6 +155,8 @@
     "@eslint/object-schema": ["@eslint/object-schema@2.1.6", "", {}, "sha512-RBMg5FRL0I0gs51M/guSAj5/e14VQ4tpZnQNWwuDT66P14I43ItmPfIZRhO9fUVIPOAQXU47atlywZ/czoqFPA=="],
 
     "@eslint/plugin-kit": ["@eslint/plugin-kit@0.3.1", "", { "dependencies": { "@eslint/core": "^0.14.0", "levn": "^0.4.1" } }, "sha512-0J+zgWxHN+xXONWIyPWKFMgVuJoZuGiIFu8yxk7RJjxkzpGmyja5wRFqZIVtjDVOQpV+Rw0iOAjYPE2eQyjr0w=="],
+
+    "@fontsource/roboto-mono": ["@fontsource/roboto-mono@5.2.6", "", {}, "sha512-fLCa3zs9XruKE8Fdbq0UWB0wqTi5dzi09QsnW7HgTwwnSVDZ3nH+X7Qg7l0yeIZs+E472cKE3RUD21ZnaXk4Zg=="],
 
     "@humanfs/core": ["@humanfs/core@0.19.1", "", {}, "sha512-5DyQ4+1JEUzejeK1JGICcideyfUbGixgS9jNgex5nqkW+cY7WZhxBigmieN5Qnw9ZosSNVC9KQKyb+GUaGyKUA=="],
 

@@ -87,13 +87,14 @@ class BackgroundManager {
         })();
         const fillStyle = o?.style ?? getParticleEffect();
 
+        let characterOffset = Math.floor(Math.random() * UPDATE_CHARACTERS.length);
         for (let y = 0; y < this.target.height + UPDATE_FADE_SIZE; y += FONT_JUMP_SIZE) {
             if (x > this.target.width) break; // Resized - disable if outside of area
 
             // Char
             this.ctx.fillStyle = fillStyle;
             this.ctx.font = FONT;
-            this.ctx.fillText(UPDATE_CHARACTERS[Math.floor(Math.random() * UPDATE_CHARACTERS.length)], x, y);
+            this.ctx.fillText(UPDATE_CHARACTERS[++characterOffset % UPDATE_CHARACTERS.length], x, y);
 
             // Fading
             this.ctx.fillStyle = `rgba(0,0,0,${UPDATE_FADE_OPACITY})`;

@@ -30,6 +30,7 @@
         "singleAttributePerLine": false
     },
     "dependencies": {
+        "@fontsource/roboto-mono": "^5.2.6",
         "lucide-preact": "^0.513.0",
         "preact": "^10.26.8",
         "preact-iso": "^2.9.1",

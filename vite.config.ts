@@ -21,7 +21,14 @@ export default {
             }
         }),
         tailwindcss(),
-        ViteImageOptimizer(),
+        ViteImageOptimizer({
+            webp: { lossless: false, quality: 50, alphaQuality: 90 },
+            png: { quality: 70, compressionLevel: 9 },
+            jpeg: { quality: 70 },
+            jpg: { quality: 70 },
+            gif: {},
+            includePublic: true
+        }),
         cleanUnusedFiles({ files: ["__prerender"] }),
         adapter(analyzer({ enabled: false }))
     ],

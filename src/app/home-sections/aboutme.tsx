@@ -1,7 +1,7 @@
 import { useState } from "preact/hooks";
 import ModalBody from "../../components/modal/modalbody";
 import { age } from "../../helpers/utils";
-import bdayHat from "../../img/bday-hat.png";
+import bdayHat from "../../img/bday-hat.webp";
 import { eventFlags } from "../../helpers/events";
 
 export default function AboutMe() {

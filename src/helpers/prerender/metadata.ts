@@ -26,15 +26,6 @@ const GLOBAL_METADATA: MetadataItem[] = [
     element({ type: "meta", props: { name: "theme-color", content: "#000000" } })
 ] as const;
 
-metadataMap.set("/", [
-    element({ type: "link", props: { rel: "preconnect", href: "https://fonts.googleapis.com" } }),
-    element({ type: "link", props: { rel: "preconnect", href: "https://fonts.gstatic.com", crossorigin: "true" } }),
-    element({
-        type: "link",
-        props: { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Roboto+Mono&display=swap" }
-    })
-]);
-
 export function getMetadata(path: string) {
     if (!path.startsWith("/")) throw new Error("Path is invalid. It should start with /");
 
