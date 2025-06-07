@@ -41,6 +41,8 @@ type BMAddToMatrixOptions = {
     style?: string;
     /** Delay between ticks */
     delay?: number;
+    /** Bypasses {@link MAX_CONCURRENT_PARTICLES} limit */
+    bypassLimits?: boolean;
 };
 
 class BackgroundManager {
@@ -85,7 +87,7 @@ class BackgroundManager {
     }
 
     async addToMatrix(o?: BMAddToMatrixOptions) {
-        if (this.concurrentParticles >= MAX_CONCURRENT_PARTICLES) return;
+        if (this.concurrentParticles >= MAX_CONCURRENT_PARTICLES && !o?.bypassLimits) return;
 
         const x = (() => {
             const x = o?.x ?? Math.floor(Math.random() * this.target.width);
@@ -94,7 +96,7 @@ class BackgroundManager {
         const fillStyle = o?.style ?? getParticleEffect();
         const delay = o?.delay ?? 100;
 
-        this.concurrentParticles++;
+        if (!o?.bypassLimits) this.concurrentParticles++;
 
         let characterOffset = Math.floor(Math.random() * UPDATE_CHARACTERS.length);
         for (let y = 0; y < this.target.height + UPDATE_FADE_SIZE; y += FONT_JUMP_SIZE) {
@@ -112,7 +114,7 @@ class BackgroundManager {
             await sleep(isFocused ? delay : delay * 5);
         }
 
-        this.concurrentParticles--;
+        if (!o?.bypassLimits) this.concurrentParticles--;
     }
 }
 
@@ -125,7 +127,7 @@ export default function MatrixBG({ className }: { className?: string }) {
         if (!bg) return;
 
         const addToMatrix = ({ x }: MouseEvent) => {
-            bg.addToMatrix({ x, style: "red", delay: 30 });
+            bg.addToMatrix({ x, style: "red", delay: 30, bypassLimits: true });
         };
 
         window.addEventListener("click", addToMatrix);
