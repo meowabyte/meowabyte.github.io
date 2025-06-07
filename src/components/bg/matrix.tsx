@@ -148,5 +148,5 @@ export default function MatrixBG({ className }: { className?: string }) {
         };
     }, []);
 
-    return <canvas class={cn(className, "fixed left-0 top-0 -z-[9999] pointer-events-none")} ref={ref} />;
+    return <canvas class={cn("absolute left-0 top-0 -z-[9999] pointer-events-none", className)} ref={ref} />;
 }

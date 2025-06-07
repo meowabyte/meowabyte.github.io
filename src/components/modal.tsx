@@ -15,7 +15,7 @@ export default function Modal({ children }: { children: ComponentChildren }) {
             ref={backdropRef}
             onClickCapture={onClose}
             class={cn(
-                "fixed w-full h-full backdrop-blur-xs backdrop-brightness-50 transition duration-150",
+                "fixed w-screen h-screen backdrop-blur-xs backdrop-brightness-50 transition duration-150 z-50",
                 !isModalSet && "pointer-events-none opacity-0 scale-90"
             )}
         >

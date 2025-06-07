@@ -1,20 +1,5 @@
-if (typeof window !== "undefined") throw new Error("PLEASE DO NOT IMPORT THIS OUTSIDE OF SERVER");
-
-// window object stub for SSR
-(() => {
-    const stubFunc = () => {};
-    const stubReturnFunc = (ret: unknown) => () => ret;
-
-    Object.defineProperty(globalThis, "localStorage", { value: { getItem: stubReturnFunc(null), setItem: stubFunc } });
-    Object.defineProperty(globalThis, "window", {
-        value: {
-            dispatchEvent: stubFunc,
-            localStorage: globalThis.localStorage,
-            addEventListener: stubFunc,
-            removeEventListener: stubFunc
-        }
-    });
-})();
+// browser objects stubs for SSR
+import "../helpers/__prerender_stubs";
 
 import { prerender as ssr } from "preact-iso";
 import { App } from "./app";

@@ -15,7 +15,7 @@
 @theme {
     --color-background: theme("colors.black");
     --color-foreground: theme("colors.white");
-    --color-secondary: theme("colors.neutral.700");
+    --color-secondary: theme("colors.neutral.400");
 
     @keyframes blink {
         from {
