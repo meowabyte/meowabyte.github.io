@@ -2,8 +2,7 @@ import { HardDrive, Link2, StarIcon } from "lucide-preact";
 import ModalBody from "../../components/modal/modalbody";
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import type { RepoData } from "../../helpers/github";
-import GitHubProjects from "../../helpers/github";
-import socials from "../../helpers/data/socials";
+import getProjects from "../../helpers/github";
 
 const MAX_TOPICS_VISIBLE = 2 as const;
 
@@ -56,25 +55,33 @@ function Project({ repo: { name, description, language, html_url, stargazers_cou
     );
 }
 
+function ProjectsError() {
+    useEffect(() => {
+        alert("Something went wrong while getting projects! I'm very sorry :(");
+    }, []);
+
+    return (
+        <div class="text-center text-red-500 flex flex-col">
+            <span>Could not get projects... :(</span>
+            <span>In the meanwhile you can check my projects manually!</span>
+        </div>
+    );
+}
+
 function ProjectsList() {
-    const [projects, setProjects] = useState<RepoData[] | null>(null);
+    const [projects, setProjects] = useState<RepoData[] | null>([]);
 
     useEffect(() => {
         (async () => {
-            const gh = new GitHubProjects(socials.github);
-            setProjects(await gh.getProjects());
+            setProjects(await getProjects());
         })();
     }, []);
 
-    const projectsToShow = useMemo(
-        () => (projects ?? []).toSorted(({ stargazers_count: a }, { stargazers_count: b }) => b - a).slice(0, 4),
-        [projects]
-    );
-
-    if (!projects) return <div class="text-center">Loading...</div>;
+    if (!projects) return <ProjectsError />;
+    if (projects.length === 0) return <div class="text-center">Loading...</div>;
     return (
         <div className="grid lg:grid-cols-2 max-lg:grid-cols-1 gap-5 max-lg:overflow-y-auto p-3">
-            {projectsToShow.map((r, i) => (
+            {projects.map((r, i) => (
                 <Project repo={r} key={`featuredrepo-${i}`} />
             ))}
         </div>
