@@ -1,68 +1,34 @@
-import { useCallback, useMemo } from "preact/hooks";
+import { useCallback } from "preact/hooks";
 import ModalBody from "../../components/modal/modalbody";
+import socials, { SOCIAL_TITLES, type SocialTypes, type SocialValueType } from "../../helpers/data/socials";
+import type { ContactMethods, ContactType, ContactValueType } from "../../helpers/data/contact";
+import contact, { CONTACT_TITLES } from "../../helpers/data/contact";
 
-const LINKS = new Map([
-    ["youtube", "youtube.com"],
-    ["github", "github.com"],
-    ["bluesky", "bsky.app/profile"],
-    ["discordServer", "discord.gg"],
-    ["telegram", "t.me"],
-    ["keybase", "keybase.io"]
-]);
-
-const typeToReadable = (type: string) =>
-    type.replace(/^[a-z]/, c => c.toUpperCase()).replace(/([a-z])([A-Z])/g, "$1 $2");
-
-const formatEntry = (type: string, ...data: string[]): { text: string; onClick: (() => void) | string } => {
-    switch (type) {
-        case "discord":
-            return { text: data[0], onClick: `https://discord.com/users/${data[1]}` };
-        case "email":
-            return { text: data[0], onClick: `mailto:${data[0]}` };
-    }
-
-    const link = LINKS.get(type);
-    return {
-        text: data[0],
-        onClick:
-            link ?
-                `https://${link}/${data[0]}`
-            :   () => {
-                    navigator.clipboard.writeText(data[0]);
-                    alert("Copied!");
-                }
-    };
+type SocialEntryAction = "copy" | "redirect";
+const SOCIAL_ENTRY_TITLE = { copy: "Copy {} to clipboard!", redirect: "Visit {}!" } as const satisfies {
+    [x in SocialEntryAction]: string;
 };
 
-export const SOCIALS: Record<string, string | string[]> = {
-    youtube: "@meowabyte",
-    github: "meowabyte",
-    bluesky: "meowpa.ws",
-    discordServer: "tqssnTUxDR"
-};
-
-const CONTACT: Record<string, string | string[]> = {
-    email: "purr@meowpa.ws",
-    discord: [".kb.", "105170831130234880"],
-    telegram: "meowabyte",
-    keybase: "meowabyte",
-    signal: "meowabyte.01"
-};
-
-function SocialLink({ data: [type, data] }: { data: [string, string | string[]] }) {
-    const { text, onClick } = formatEntry(type, ...(Array.isArray(data) ? data : [data]));
+type SocialEntryProps = { title: string; text: string; value: string; action: SocialEntryAction };
+function SocialEntry({ title, text, value, action }: SocialEntryProps) {
     const handleClick = useCallback(() => {
-        if (typeof onClick === "string") return window.open(onClick, "_blank");
-        onClick();
-    }, []);
-    const readableType = useMemo(() => typeToReadable(type), []);
+        switch (action) {
+            case "copy":
+                navigator.clipboard.writeText(value);
+                alert("Copied!");
+                break;
+            case "redirect":
+                window.open(value, "_blank");
+                break;
+        }
+    }, [value, action]);
 
     return (
         <div>
-            <span className="font-bold text-left select-none">{readableType}</span>
+            <span className="font-bold text-left select-none">{title}</span>
             <span
                 role="button"
-                title={`${typeof onClick === "string" ? "Visit" : "Check out"} ${readableType}`}
+                title={SOCIAL_ENTRY_TITLE[action].replaceAll("{}", text)}
                 onClick={handleClick}
                 className="text-right select-text"
             >
@@ -72,24 +38,65 @@ function SocialLink({ data: [type, data] }: { data: [string, string | string[]] 
     );
 }
 
+const urlToReadable = (url: string) => new URL(url).pathname.split("/").pop()!;
+
+const socialToEntry = (t: SocialTypes, d: SocialValueType): SocialEntryProps => {
+    const title = SOCIAL_TITLES[t];
+
+    if (typeof d === "string") return { title, value: d, text: urlToReadable(d), action: "redirect" };
+
+    return { title, value: d.url, action: "redirect", text: d.id };
+};
+function Socials() {
+    return (
+        <div>
+            {Object.entries(socials).map(([type, data]) => {
+                const props = socialToEntry(type as SocialTypes, data);
+                return <SocialEntry key={`social-${type}`} {...props} />;
+            })}
+        </div>
+    );
+}
+
+const contactTypeToAction = (type: ContactType): SocialEntryAction => (type === "url" ? "redirect" : "copy");
+const contactToEntry = (t: ContactMethods, d: ContactValueType): SocialEntryProps => {
+    const title = CONTACT_TITLES[t];
+
+    if (typeof d === "string") {
+        const type: ContactType = URL.canParse(d) ? "url" : "username";
+
+        return { title, value: d, text: type === "url" ? urlToReadable(d) : d, action: contactTypeToAction(type) };
+    }
+
+    return {
+        title,
+        value: d.value,
+        text: d.id ?? (d.type === "url" ? urlToReadable(d.value) : d.value),
+        action: contactTypeToAction(d.type)
+    };
+};
+
+function Contacts() {
+    return (
+        <div>
+            {Object.entries(contact).map(([type, data]) => {
+                const props = contactToEntry(type as ContactMethods, data);
+                return <SocialEntry key={`contact-${type}`} {...props} />;
+            })}
+        </div>
+    );
+}
+
 export default function Social() {
     return (
         <ModalBody className="grid max-lg:grid-rows-2 lg:grid-cols-2 max-sm:w-4/5 lg:justify-between gap-10 *:[&>h2]:text-center *:[&>h2]:mb-5 *:*:*:grid *:*:*:grid-cols-2 *:*:*:content-between">
             <div>
                 <h2 class="select-none">Socials</h2>
-                <div>
-                    {Object.entries(SOCIALS).map((s, i) => (
-                        <SocialLink data={s} key={`social-entry-${i}`} />
-                    ))}
-                </div>
+                <Socials />
             </div>
             <div>
                 <h2 class="select-none">Contact</h2>
-                <div>
-                    {Object.entries(CONTACT).map((c, i) => (
-                        <SocialLink data={c} key={`contact-entry-${i}`} />
-                    ))}
-                </div>
+                <Contacts />
             </div>
         </ModalBody>
     );

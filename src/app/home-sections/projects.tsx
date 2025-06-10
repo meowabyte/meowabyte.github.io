@@ -1,9 +1,9 @@
 import { HardDrive, Link2, StarIcon } from "lucide-preact";
 import ModalBody from "../../components/modal/modalbody";
-import { SOCIALS } from "./social";
 import { useCallback, useEffect, useMemo, useState } from "preact/hooks";
 import type { RepoData } from "../../helpers/github";
 import GitHubProjects from "../../helpers/github";
+import socials from "../../helpers/data/socials";
 
 const MAX_TOPICS_VISIBLE = 2 as const;
 
@@ -61,7 +61,7 @@ function ProjectsList() {
 
     useEffect(() => {
         (async () => {
-            const gh = new GitHubProjects(SOCIALS.github! as string);
+            const gh = new GitHubProjects(socials.github);
             setProjects(await gh.getProjects());
         })();
     }, []);
