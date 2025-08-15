@@ -3,6 +3,7 @@ import ModalBody from "../../components/modal/modalbody";
 import { age } from "../../helpers/utils";
 import bdayHat from "../../img/bday-hat.webp";
 import { eventFlags } from "../../helpers/events";
+import Avatar from "../../img/av.webp";
 
 export default function AboutMe() {
     const [avatarLoaded, setAvatarLoaded] = useState(false);
@@ -24,7 +25,7 @@ export default function AboutMe() {
                     className="justify-self-center"
                     width={400}
                     height={400}
-                    src="https://github.com/meowabyte.png?size=400"
+                    src={Avatar}
                     alt="Avatar"
                 />
             </div>

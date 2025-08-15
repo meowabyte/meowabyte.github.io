@@ -6,6 +6,8 @@ import SillyRenderer from "../../components/silly";
 import { boringMode, EVENT_FLAGS_BLACKLIST, eventFlags } from "../../helpers/events";
 import { cn, sleep } from "../../helpers/utils";
 import type { HomeScreenProps } from "../home";
+import Typer from "../../components/menu/typer";
+import socials from "../../helpers/data/socials";
 
 const MatrixBG = lazy(() => import("../../components/bg/matrix"));
 
@@ -14,59 +16,55 @@ const TITLE_TEXT = (() => {
     if (eventFlags.includes("PRIDE")) return "Happy Pride Month!";
     return "Welcome to meowpa.ws!";
 })();
-const TYPEWRITER_DELAY = 30 as const;
 
 const GLITCH_CHARACTERS = ["@", "#", "/", "\\", "&", "%"] as const;
 
+function CodebergNotification() {
+    const [aknowledged, setAknowledged] = useState(false);
+
+    if (aknowledged) return;
+    return (
+        <span class="fixed w-screen bg-yellow-400 text-black text-center text-xs px-3 py-1 not-hover:opacity-20">
+            All projects are slowly being migrated to <a href={socials.codeberg}>Codeberg</a>! Sorry for possible
+            outages!
+            <span
+                onClick={() => setAknowledged(true)}
+                role="button"
+                class="absolute right-3 font-bold top-1/2 -translate-y-1/2"
+            >
+                X
+            </span>
+        </span>
+    );
+}
+
 export function Home({ setScreenIndex }: HomeScreenProps) {
-    const [isBlinking, setBlinking] = useState(true);
-    const [avatarPreloaded, setAvatarPreloaded] = useState(false);
     const [animationState, setAnimationState] = useState(0);
     const titleRef = useRef<HTMLSpanElement>(null);
 
-    const startTyping = useCallback(
-        async (clear?: boolean) => {
-            if (!titleRef.current) return;
+    const nextAnimationState = useCallback(() => setAnimationState(v => v + 1), []);
 
-            const lastBlinkingState = isBlinking;
-            setBlinking(true);
-
-            if (clear) titleRef.current.textContent = "";
-            for (const c of TITLE_TEXT) {
-                titleRef.current.textContent += c;
-                await sleep(TYPEWRITER_DELAY);
-            }
-
-            setBlinking(lastBlinkingState);
-        },
-        [titleRef]
-    );
-
-    // Preloading actions
+    // Intro
     useEffect(() => {
-        if (animationState === 2) MatrixBG.preload(); // BG Preload
-    }, [animationState]);
-
-    // Intro Animation
-    useEffect(() => {
-        const animate = async () => {
-            await sleep(800).then(() => startTyping(true));
-
+        const showOtherComponents = async () => {
             for (let i = 0; i < 3; i++) await sleep(400).then(() => setAnimationState(s => s + 1));
         };
 
-        if (document.readyState !== "loading") animate();
-        else document.addEventListener("DOMContentLoaded", animate, { once: true });
-
-        return () => {
-            document.removeEventListener("DOMContentLoaded", animate);
-        };
-    }, []);
+        switch (animationState) {
+            case 0:
+                sleep(800).then(() => nextAnimationState());
+                break;
+            case 2:
+                showOtherComponents();
+                break;
+        }
+    }, [animationState]);
 
     // Title glitch effect
     useEffect(() => {
-        if (animationState < 2 || !titleRef.current) return;
+        if (animationState < 4 || !titleRef.current) return;
 
+        console.log(titleRef);
         const validChars = titleRef.current!.textContent!.split("").reduce<number[]>((arr, c, i) => {
             if (c !== " ") arr.push(i);
             return arr;
@@ -99,39 +97,34 @@ export function Home({ setScreenIndex }: HomeScreenProps) {
         location.reload();
     }, []);
 
-    const preloadAvatar = useCallback(() => {
-        if (avatarPreloaded) return;
-
-        new Image().src = "https://github.com/meowabyte.png?size=400";
-        setAvatarPreloaded(true);
-    }, [avatarPreloaded]);
-
     return (
         <div>
-            {animationState >= 3 && (EVENT_FLAGS_BLACKLIST.some(f => eventFlags.includes(f)) || boringModeState) && (
-                <button
-                    class="absolute left-1/2 -translate-x-1/2 top-4 text-sm text-secondary"
-                    onClick={toggleBoringMode}
-                >
-                    [ Boring Mode - {boringModeState ? "ON" : "OFF"} ]
-                </button>
+            {animationState >= 3 && (
+                <>
+                    <CodebergNotification />
+                    {(boringModeState || EVENT_FLAGS_BLACKLIST.some(f => eventFlags.includes(f))) && (
+                        <button
+                            class="absolute left-1/2 -translate-x-1/2 top-4 text-sm text-secondary"
+                            onClick={toggleBoringMode}
+                        >
+                            [ Boring Mode - {boringModeState ? "ON" : "OFF"} ]
+                        </button>
+                    )}
+                </>
             )}
+
             <MenuProvider>
                 <div class="select-none absolute left-1/2 top-1/2 -translate-1/2 text-center h-1/2 w-5/6 flex flex-col items-center">
-                    <span
-                        ref={titleRef}
-                        className={cn(
-                            'text-3xl after:content-["▊"] after:ml-1',
-                            isBlinking && "after:animate-[blink_0.5s_alternate_infinite]"
-                        )}
-                    ></span>
+                    <Typer
+                        className="text-3xl"
+                        text={TITLE_TEXT}
+                        isPaused={animationState < 1}
+                        onFinish={() => animationState === 1 && nextAnimationState()}
+                        innerRef={titleRef}
+                    />
 
-                    <Menu className={animationSlide(1)}>
-                        <MenuButton
-                            onHover={preloadAvatar}
-                            lazy
-                            element={lazy(() => import("../home-sections/aboutme"))}
-                        >
+                    <Menu className={animationSlide(2)}>
+                        <MenuButton lazy element={lazy(() => import("../home-sections/aboutme"))}>
                             About Me
                         </MenuButton>
                         <MenuButton lazy element={lazy(() => import("../home-sections/projects"))}>
@@ -142,10 +135,10 @@ export function Home({ setScreenIndex }: HomeScreenProps) {
                         </MenuButton>
                     </Menu>
 
-                    <SillyRenderer className={animationSlide(2)} height={250} width={250} />
+                    <SillyRenderer className={animationSlide(3)} height={250} width={250} />
                 </div>
             </MenuProvider>
-            {animationState >= 3 && (
+            {animationState >= 4 && (
                 <>
                     <button
                         class="absolute left-1/2 -translate-x-1/2 bottom-4 text-sm text-secondary"

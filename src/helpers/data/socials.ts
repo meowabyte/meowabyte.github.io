@@ -1,4 +1,4 @@
-export type SocialTypes = "youtube" | "github" | "bluesky" | "discordServer";
+export type SocialTypes = "youtube" | "github" | "codeberg" | "bluesky" | "discordServer";
 
 export type SocialLink = `${"http" | "https"}://${string}`;
 export type SocialValueType =
@@ -15,6 +15,7 @@ export type Socials = { [x in SocialTypes]: SocialValueType };
 export const SOCIAL_TITLES: { [x in SocialTypes]: string } = {
     youtube: "YouTube",
     github: "GitHub",
+    codeberg: "Codeberg",
     bluesky: "Bluesky",
     discordServer: "Discord"
 };
@@ -22,6 +23,7 @@ export const SOCIAL_TITLES: { [x in SocialTypes]: string } = {
 export default {
     youtube: "https://youtube.com/@meowabyte",
     github: "https://github.com/meowabyte",
+    codeberg: "https://codeberg.org/meowabyte",
     bluesky: "https://bsky.app/profile/meowpa.ws",
     discordServer: { url: "https://discord.gg/tqssnTUxDR", id: ".gg/tqssnTUxDR" }
 } as const satisfies Socials;

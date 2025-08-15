@@ -4,7 +4,7 @@ import tseslint from "typescript-eslint";
 import pluginGitignore from "eslint-config-flat-gitignore";
 import css from "@eslint/css";
 import { defineConfig } from "eslint/config";
-import { tailwindSyntax } from "@eslint/css/syntax";
+import { tailwind4 } from "tailwind-csstree";
 
 export default defineConfig([
     { files: ["**/*.{js,mjs,cjs,ts,mts,cts,jsx,tsx}"], plugins: { js }, extends: ["js/recommended"] },
@@ -16,7 +16,9 @@ export default defineConfig([
         plugins: { css },
         language: "css/css",
         extends: ["css/recommended"],
-        languageOptions: { customSyntax: tailwindSyntax },
+        languageOptions: { customSyntax: tailwind4 },
+        rules: { "css/no-invalid-properties": "off" },
+
         // full tailwind support doesn't exist for theme() :(
         // https://eslint.org/blog/2025/02/eslint-css-support/#custom-syntax-support
         ignores: ["src/styles/globals.css"]

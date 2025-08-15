@@ -1,6 +1,6 @@
 {
     "name": "meowabyte.github.io",
-    "version": "1.2.0",
+    "version": "1.3.0",
     "private": true,
     "license": "MIT",
     "type": "module",
@@ -30,34 +30,38 @@
         "singleAttributePerLine": false
     },
     "dependencies": {
-        "@fontsource/roboto-mono": "^5.2.6",
+        "@fontsource-variable/roboto-mono": "^5.2.6",
         "crc-32": "^1.2.2",
-        "lucide-preact": "^0.513.0",
-        "preact": "^10.26.8",
-        "preact-iso": "^2.9.1",
-        "three": "^0.177.0"
+        "lucide-preact": "^0.539.0",
+        "preact": "^10.27.0",
+        "preact-iso": "^2.9.2",
+        "three": "^0.179.1"
     },
     "devDependencies": {
-        "tailwindcss": "^4.1.8",
-        "@eslint/css": "^0.8.1",
-        "@eslint/js": "^9.28.0",
-        "@preact/preset-vite": "^2.10.1",
-        "@tailwindcss/vite": "^4.1.8",
-        "@types/three": "^0.177.0",
-        "eslint": "^9.28.0",
+        "@eslint/css": "^0.10.0",
+        "@eslint/js": "^9.33.0",
+        "@preact/preset-vite": "^2.10.2",
+        "@tailwindcss/vite": "^4.1.12",
+        "@types/node": "^24.3.0",
+        "@types/three": "^0.179.0",
+        "eslint": "^9.33.0",
         "eslint-config-flat-gitignore": "^2.1.0",
-        "globals": "^16.2.0",
+        "globals": "^16.3.0",
         "lightningcss": "^1.30.1",
-        "prettier": "^3.5.3",
-        "sharp": "^0.34.2",
-        "svgo": "^3.3.2",
-        "typescript": "~5.8.3",
-        "typescript-eslint": "^8.33.1",
-        "vite": "^6.3.5",
-        "vite-bundle-analyzer": "^0.22.0",
-        "vite-plugin-image-optimizer": "^1.1.8"
+        "prettier": "^3.6.2",
+        "sharp": "^0.34.3",
+        "svgo": "^4.0.0",
+        "tailwind-csstree": "^0.1.3",
+        "tailwindcss": "^4.1.12",
+        "typescript": "~5.9.2",
+        "typescript-eslint": "^8.39.1",
+        "vite": "^7.1.2",
+        "vite-bundle-analyzer": "^1.2.1",
+        "vite-plugin-image-optimizer": "^2.0.2"
     },
     "trustedDependencies": [
-        "@tailwindcss/oxide"
+        "@tailwindcss/oxide",
+        "esbuild",
+        "sharp"
     ]
 }

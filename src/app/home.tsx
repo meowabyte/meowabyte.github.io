@@ -1,3 +1,4 @@
+import "@fontsource-variable/roboto-mono";
 import "../styles/home.css";
 
 import { useState, type Dispatch, type StateUpdater } from "preact/hooks";
