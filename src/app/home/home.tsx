@@ -64,7 +64,6 @@ export function Home({ setScreenIndex }: HomeScreenProps) {
     useEffect(() => {
         if (animationState < 4 || !titleRef.current) return;
 
-        console.log(titleRef);
         const validChars = titleRef.current!.textContent!.split("").reduce<number[]>((arr, c, i) => {
             if (c !== " ") arr.push(i);
             return arr;
