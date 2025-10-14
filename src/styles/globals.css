@@ -1,32 +1,36 @@
 @import "tailwindcss";
 
 @layer base {
-    h2 {
-        @apply text-2xl;
-    }
-
-    button,
-    a,
-    [role="button"] {
-        @apply underline decoration-dotted underline-offset-[6px] hover:decoration-solid cursor-pointer select-none;
+    body {
+        font-family: 'VT323', monospace;
     }
 }
 
-@theme {
-    --color-background: theme("colors.black");
-    --color-foreground: theme("colors.white");
-    --color-secondary: theme("colors.neutral.400");
-
-    @keyframes blink {
-        from {
-            opacity: 0;
-        }
-        to {
-            opacity: 1;
-        }
+@keyframes scanlines {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: 2rem 2rem;
     }
 }
 
-body {
-    @apply bg-background text-foreground;
+.retro-grid {
+    background-color: #000000;
+    background-image:
+        linear-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+    background-size: 2rem 2rem;
+    animation: scanlines 5s linear infinite;
+}
+
+.neon-glow {
+    box-shadow: 0 0 5px rgba(255, 255, 255, 0.4), 
+                0 0 10px rgba(255, 255, 255, 0.3), 
+                0 0 15px rgba(255, 255, 255, 0.2);
+}
+
+.neon-glow-button:hover {
+        box-shadow: 0 0 8px rgba(255, 255, 255, 0.6), 
+                    0 0 15px rgba(255, 255, 255, 0.4);
 }

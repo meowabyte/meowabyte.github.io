@@ -7,19 +7,22 @@ import preact from "@preact/preset-vite";
 import tailwindcss from "@tailwindcss/vite";
 import { ViteImageOptimizer } from "vite-plugin-image-optimizer";
 import { adapter, analyzer } from "vite-bundle-analyzer";
-import cleanUnusedFiles from "./plugins/cleanUnusedFiles";
+import svgr from "vite-plugin-svgr"
 
 export default {
+    resolve: {
+        alias: {
+            "@": join(__dirname, "src"),
+        }
+    },
     plugins: [
         preact({
             prerender: {
                 enabled: true,
-                renderTarget: "#root",
-                previewMiddlewareEnabled: true,
-                previewMiddlewareFallback: "/404",
-                prerenderScript: join(import.meta.dirname, "src", "app", "__prerender.tsx")
+                renderTarget: "#root"
             }
         }),
+        svgr(),
         tailwindcss(),
         ViteImageOptimizer({
             webp: { lossless: false, quality: 50, alphaQuality: 90 },
@@ -29,7 +32,6 @@ export default {
             gif: {},
             includePublic: true
         }),
-        cleanUnusedFiles({ files: ["__prerender"] }),
         adapter(analyzer({ enabled: false }))
     ],
     css: { transformer: "lightningcss" },
@@ -50,5 +52,5 @@ export default {
             }
         }
     },
-    optimizeDeps: { include: ["lucide-preact", "three", "preact-iso", "preact"] }
+    optimizeDeps: { include: ["lucide-preact", "preact-iso", "preact"] }
 } satisfies UserConfig;

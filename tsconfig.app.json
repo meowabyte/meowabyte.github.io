@@ -6,7 +6,12 @@
         "module": "ESNext",
         "lib": ["ES2024", "DOM", "DOM.Iterable"],
         "skipLibCheck": true,
-        "paths": { "react": ["./node_modules/preact/compat/"], "react-dom": ["./node_modules/preact/compat/"] },
+        "paths": {
+            "react": ["./node_modules/preact/compat/"],
+            "react-dom": ["./node_modules/preact/compat/"],
+
+            "@/*": ["./src/*"]
+        },
 
         /* Bundler mode */
         "moduleResolution": "bundler",
