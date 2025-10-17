@@ -45,7 +45,7 @@ export function App() {
             <div class="flex items-center justify-center space-x-4">
                 <SocialBtn title="GitHub" icon={GithubIcon} link="https://github.com/meowabyte" />
                 <SocialBtn title="YouTube" icon={YoutubeIcon} link="https://www.youtube.com/@meowabyte" />
-                <SocialBtn title="Bluesky" icon={BlueskyIcon} link="https://bsky.social/profile/meowpa.ws" />
+                <SocialBtn title="Bluesky" icon={BlueskyIcon} link="https://bsky.app/profile/meowpa.ws" />
                 <SocialBtn title="Discord" icon={DiscordIcon} link="https://discord.gg/tqssnTUxDR" />
             </div>
         </div>
