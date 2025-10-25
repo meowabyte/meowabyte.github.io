@@ -1,5 +1,5 @@
-# meowpa.ws
-[meowpa.ws](https://meowpa.ws) is my personal page written in [Vite](https://vite.dev/).
+# meowabyte.lol
+[meowabyte.lol](https://meowabyte.lol) is my personal page written in [Vite](https://vite.dev/).
 
 It is written in [Preact](https://preactjs.com) (originally in React) to keep sizes of files as low as possible while not sactificing it's quality from the original. It also uses various optimization techniques such as tree-shaking, dynamic imports, code splitting, minifing or prerendering (via [preact-iso](https://preactjs.com/guide/v10/preact-iso/) and it's `prerender` function) to make the site as performant as possible.  
 
@@ -13,8 +13,8 @@ It also includes [my own plugins](/plugins/) for purposes like cleaning unused/b
 ## Development
 In this example I'm gonna use [bun](https://bun.sh/) as a package manager and runtime as well as and [git](https://git-scm.com/) for cloning the repo.
 ```bash
-$ git clone https://codeberg.org/meowabyte/meowpa.ws # Clone repo
-$ cd "meowpa.ws" # Navigate to the project directory
+$ git clone https://github.com/meowabyte/meowabyte.github.io # Clone repo
+$ cd "meowabyte.github.io" # Navigate to the project directory
 $ bun install # Install requirements
 $ bun dev # Run development server
 ```

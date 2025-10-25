@@ -45,7 +45,7 @@ export function App() {
             <div class="flex items-center justify-center space-x-4">
                 <SocialBtn title="GitHub" icon={GithubIcon} link="https://github.com/meowabyte" />
                 <SocialBtn title="YouTube" icon={YoutubeIcon} link="https://www.youtube.com/@meowabyte" />
-                <SocialBtn title="Bluesky" icon={BlueskyIcon} link="https://bsky.app/profile/meowpa.ws" />
+                <SocialBtn title="Bluesky" icon={BlueskyIcon} link="https://bsky.app/profile/meowabyte.lol" />
                 <SocialBtn title="Discord" icon={DiscordIcon} link="https://discord.gg/tqssnTUxDR" />
             </div>
         </div>
@@ -54,7 +54,7 @@ export function App() {
             <h2 class="text-2xl mb-4">Contact</h2>
             <p class="text-white/80 mb-4">In case something urgent happens, reach me out here:</p>
             <div class="flex items-center justify-center space-x-4">
-                <ContactBtn title="Email" link="mailto:purr@meowpa.ws" />
+                <ContactBtn title="Email" link="mailto:contact@meowabyte.lol" />
                 <ContactBtn title="Telegram" link="https://t.me/meowabyte" />
             </div>
         </div>
